@@ -37,7 +37,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+### Learn More: 
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
@@ -76,21 +76,21 @@ To get started with Docker: https://www.docker.com/get-started
 
 In the project directory, you can run following to build a dev container:
 
-### docker build -t k8s-react-frontend-dev -f Dockerfile.dev .
+### `docker build -t k8s-react-frontend-dev -f Dockerfile.dev .`
 
 Then you can run following to run the  dev container:
 
-### docker run -it --rm -p 3000:3000 k8s-react-frontend-dev
+### `docker run -it --rm -p 3000:3000 k8s-react-frontend-dev`
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Now, in the project directory, you can run following to build a production container with a nginx web server:
 
-### docker build -t k8s-react-frontend .
+### `docker build -t k8s-react-frontend .`
 
 Then you can run following to run the  dev container:
 
-### docker run -it -p 3000:80 --rm k8s-react-frontend:latest
+### `docker run -it -p 3000:80 --rm k8s-react-frontend:latest`
 
 You can ignore the warnings in the console:
 10-listen-on-ipv6-by-default.sh: error: /etc/nginx/conf.d/default.conf is not a file or does not exist
@@ -113,39 +113,37 @@ Under project directory, navigate to kubernates directory and review the two yml
 1. push the docker container images from STEP 2 to docker hub:
 (Note: by default kubernates search for container images from Docker hub)
 
-### docker tag k8s-react-frontend [your docker hub repository name]/k8s-react-frontend
+### `docker tag k8s-react-frontend [your docker hub repository name]/k8s-react-frontend`
 
 2. deploy the docker container in a kubernated cluster using deployment:
 (Note: you can deploy as pods as well but deployment is a preferred approach)
 
-### kubectl apply -f react.frontend.deployment.yml 
+### `kubectl apply -f react.frontend.deployment.yml` 
 
 3. verify the deployment was successful: 
-### kubectl get deployment 
+### `kubectl get deployment` 
 
 4. verify the pods with REACT container images are running: 
-### kubectl get pods
+### `kubectl get pods`
 
 5. verify a pod with REACT container is confgured & deployed correctly: 
-### kubectl describe pod react-frontend-xxxxxxxxxx-xxxxx
+### `kubectl describe pod react-frontend-xxxxxxxxxx-xxxxx`
 
-6. verify the REACT app is working correctly: 
+6. You can also ssh into the container to verify the REACT app contents: 
+### kubectl exec react-frontend-xxxxxxxxxx-xxxxx -it sh
+
+navigate to /usr/share/nginx/html folder where you should see the contents from build folder of your REACT app (from STEP 1)
+
+7. verify the REACT app is working correctly: 
 (Note: here we are simply binding a port from our local machine port 8080 to container port 80)
-### kubectl port-forward deployment/react-frontend 8080:80  
-
-Optionally, you can use port forward on the PODS as well.,
-For a deployed application, you can use Kubernates Service: 
-[https://kubernetes.io/docs/concepts/services-networking/service/] (https://kubernetes.io/docs/concepts/services-networking/service/)
-
-### kubectl port-forward pod/react-frontend-xxxxxxxxxx-xxxxx 8080:80  
+### `kubectl port-forward deployment/react-frontend 8080:80`  
 
 Open [http://localhost:8080](http://localhost:8080) to view the React app in the browser. 
 
 You can exit the termical once done. 
 
-7. Optionally, you can ssh into the container to verify the REACT app contents: 
-### kubectl exec react-frontend-xxxxxxxxxx-xxxxx -it sh
+you can also use port forward on the PODS as well. 
+### `kubectl port-forward pod/react-frontend-xxxxxxxxxx-xxxxx 8080:80`  
 
-navigate to /usr/share/nginx/html folder where you should see the contents from build folder of your REACT app (from STEP 1)
-
-8. 
+For a deployed application, you can use Kubernates Service: 
+[https://kubernetes.io/docs/concepts/services-networking/service/] (https://kubernetes.io/docs/concepts/services-networking/service/)
