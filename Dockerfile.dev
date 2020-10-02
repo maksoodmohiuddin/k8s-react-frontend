@@ -1,0 +1,20 @@
+# set the base image
+# This is the application image from which all other subsequent applications run
+# Alpine Linux is a security-oriented, lightweight (~5Mb) Linux distribution. 
+FROM node:alpine
+
+# set working directory
+# this is the working folder in the container from which the app will be running from
+WORKDIR /app
+
+# copy package.json to install the packages from 
+COPY package.json /app
+
+# install dependencies
+RUN yarn install
+
+# copy everything to /app directory
+COPY . /app
+
+# statr the app 
+CMD ["yarn", "run", "start"]
